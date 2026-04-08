@@ -96,7 +96,7 @@
 
     <!-- Copyright Information: Start -->
     <span class="w-full text-center mt-10 text-xs lg:text-base">
-        &copy; 2025 Powered by <a href="https://github.com/MRG14" target="_blank"
+        &copy; 2026 Powered by <a href="https://github.com/MRG14" target="_blank"
             class="underline hover:text-primary duration-200" title="Github">MRG14</a>
     </span>
     <!-- Copyright Information: End -->
