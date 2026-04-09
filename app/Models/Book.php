@@ -30,37 +30,40 @@ class Book extends Model
      * Relationships
      */
 
-    public function user()
-    {
+    public function user() {
         return $this->belongsTo(User::class);
     }
 
-    public function category()
-    {
+    public function category() {
         return $this->belongsTo(Category::class);
+    }
+
+    public function borrowings() {
+        return $this->hasMany(Borrowing::class);
+    }
+
+    public function activeBorrowings() {
+        return $this->hasOne(Borrowing::class)->whereIn('status', ['pending', 'approved']);
     }
 
     /**
      * Scope for approved books
      */
-    public function scopeApproved($query)
-    {
+    public function scopeApproved($query) {
         return $query->where('status', 'approved');
     }
 
     /**
      * Scope for pending books
      */
-    public function scopePending($query)
-    {
+    public function scopePending($query) {
         return $query->where('status', 'waiting approval');
     }
 
     /**
      * Scope for rejected books
      */
-    public function scopeRejected($query)
-    {
+    public function scopeRejected($query) {
         return $query->where('status', 'rejected');
     }
 }

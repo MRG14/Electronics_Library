@@ -11,7 +11,7 @@
     <!-- Meta Tag - Support Responsive Layout: End -->
 
     <!-- Title: Start -->
-    <title>Detail Buku {{ $book->title }} | {{ config('app.name', 'Digital Library') }}</title>
+    <title>Detail Buku {{ $book->title }} | {{ config('app.name', 'E Library') }}</title>
     <!-- Title: End -->
 
     <!-- Laravel Assets: Start -->
@@ -104,9 +104,61 @@
                 </button>
             @endif
             <!-- Read Button: End -->
+
+            @auth
+                @php
+                    $myBorrowing = $book->borrowings()
+                        ->where('user_id', auth()->id())
+                        ->whereIn('status', ['pending', 'approved'])
+                        ->first();
+                    $isBookTaken = $book->borrowings()
+                        ->whereIn('status', ['pending', 'approved'])
+                        ->exists();
+                @endphp
+
+                @if ($myBorrowing)
+                    <!--User sudah punya peminjaman aktif-->    
+                    @if ($myBorrowing->status === 'pending')
+                        <span class="w-fit mt-2 font-bold uppercase border border-yellow-500 text-yellow-600 rounded-lg py-2 px-4 text-sm">
+                            Menunggu Konfirmasi admin
+                        </span>
+                    @elseif ($myBorrowing->status === 'approved')
+                        <span class="w-fit mt-2 font-bold uppercase border border-blue-500 text-blue-600 rounded-lg py-2 px-4 text-sm">
+                            Sedang Kamu Pinjam — Kembali sebelum {{ $myBorrowing->due_date->format('d M Y') }}
+                        </span>
+                    @endif
+                @elseif ($isBookTaken)
+                    <!--Buku sedang dipijam orang lain-->
+                    <span class="w-fit mt-2 font-bold uppercase border border-gray-400 text-gray-500 rounded-lg py-2 px-4 text-sm">
+                        Sedang Di Pinjam
+                    </span>
+                @else
+                    <!--Buku tersedia untuk di pinjam-->
+                    @if (session('success'))
+                        <div class="mt-2 p-3 bg-green-100 border text-green-700 rounded-md text-sm">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+                    @if (session('error'))
+                        <div class="mt-2 p-3 bg-red-100 border text-red-700 rounded-md text-sm">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('borrowings.store') }}" class="mt-2">
+                        @csrf
+                        <input type="hidden" name="book_id" value="{{ $book->id }}" />
+                        <button type="submit"
+                            class="w-fit font-bold uppercase border border-green-600 bg-green-600 text-white rounded-lg hover:bg-white hover:text-green-600 duration-200 py-2 px-4 cursor-pointer">
+                            Pinjam Buku
+                        </button>
+                    </form>
+                @endif
+            @endauth
         </div>
     </section>
     <!-- Book Details Section: End -->
+
 
     <!-- PDF Viewer: Start -->
     @auth

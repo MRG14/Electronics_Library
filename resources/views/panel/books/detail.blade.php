@@ -11,7 +11,7 @@
     <!-- Meta Tag - Support Responsive Layout: End -->
 
     <!-- Title: Start -->
-    <title>Panel - Detail Karya | {{ config('app.name', 'Digital Library') }}</title>
+    <title>Panel - Detail Karya | {{ config('app.name', 'E Library') }}</title>
     <!-- Title: End -->
 
     <!-- Laravel Assets: Start -->

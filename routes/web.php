@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BorrowingController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\UserController;
@@ -47,6 +48,22 @@ Route::middleware(RedirectIfAuthenticated::class)->group(function() {
 });
 
 Route::middleware(['auth', CheckUserStatus::class])->group(function () {
+    
+    //peminjman untuk use mengajukan request
+    Route::post('/borrowing', [BorrowingController::class, 'store'])->name('borrowings.store');
+
+    //Peminjaman halaman daftar (admin: semua, user:hanya miliknya sendiri)
+    Route::get('/panel/borrowing', [BorrowingController::class, 'index'])->name('borrowings.index');
+
+    //Peminjaman review approval admin:only
+    Route::get('/panel/borrowing/{borrowing}/appoval', [BorrowingController::class, 'showApproval'])->name('borrowings.show.approval');
+    Route::put('/panel/borrowing/{borrowing}/appoval', [BorrowingController::class, 'handleApproval'])->name('borrowings.approval');
+
+    //Peminjaman konfirmasi - pengembalian
+    Route::get('/panel/borrowing/{borrowing}/return', [BorrowingController::class, 'showReturn'])->name('borrowings.show.return');
+    Route::put('/panel/borrowing/{borrowing}/return', [BorrowingController::class, 'handleReturn'])->name('borrowings.return');
+
+
     Route::get('/panel', [BookController::class, 'index'])->name('books.index');
 
     Route::get('/panel/book/create', [BookController::class, 'showCreateForm'])->name('books.show.create');
