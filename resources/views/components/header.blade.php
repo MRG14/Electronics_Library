@@ -93,6 +93,13 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="{{ route('borrowings.index') }}" class="hover:text-primary duration-200"
+                        title="Klik untuk membuka halaman 'Peminjaman Buku'">
+                        {{ auth()->user()->role === 'admin' ? 'Peminjaman Buku' : 'Peminjaman Saya' }}
+                    </a>
+                </li>
+
                 @if (auth()->user()->role === 'admin')
                     <li class="flex">
                         <a href="{{ route('categories.index') }}" class="hover:text-primary duration-200"
