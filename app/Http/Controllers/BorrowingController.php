@@ -108,8 +108,8 @@ class BorrowingController extends Controller
 
        if ($request->approval === 'approve') {
             $borrowing->status = 'approved';
-            $borrowing->borrowed_at = now();
-            $borrowing->due_date = now()->addDays(7); //batas waktu 7 hari
+            $borrowing->borrowed_at = now();    
+            $borrowing->due_date = now()->addDays(7); //batas waktu 7 har   i
        } else {
             $borrowing->status = 'rejected';
        }
@@ -151,5 +151,28 @@ class BorrowingController extends Controller
         $borrowing->save();
 
         return redirect()->route('borrowings.index')->with('success', 'Pengembalian buku berhasil dikonfirmasi');
+    }
+    
+    public function requestReturn(Borrowing $borrowing) {
+        // pastikan ini milik user yang sudah login
+        if ($borrowing->user_id !== auth()->id()) {
+            return back()->with('error','aksi tidak diizinkan');
+        }
+
+        //hanya bisa jika status masih approved
+        if ($borrowing->status !== 'approved') {
+            return back()->with('error','Peminjaman ini tidak dalam status aktif');
+        }
+
+        $borrowing->return_requested = true;
+        $borrowing->save();
+ 
+        return back()->with('success', 'Pengajuan pengembalian berhasil dikirim! Silakan kembalikan buku ke admin.');
+    }
+
+    public function handleDelete(Borrowing $borrowing) {
+        $borrowing->delete();
+
+        return back()->with('success', 'Data berhasil dihapus');
     }
 }

@@ -2,7 +2,7 @@
     <!-- Avatar Image: Start -->
     <div class="w-30 h-30 border-4 border-primary rounded-full overflow-hidden p-2">
         <img class="w-full h-full object-cover rounded-full"
-            src="{{ auth()->user()->avatar_path ? asset('storage/' . auth()->user()->avatar_path) : 'https://placehold.co/300x300?text=Develobe+Academy' }}"
+            src="{{ auth()->user()->avatar_path ? asset('storage/' . auth()->user()->avatar_path) : 'https://placehold.co/300x300?text=Electronics+Library' }}"
             alt="Avatar Pengguna" />
     </div>
     <!-- Avatar Image: End -->

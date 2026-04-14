@@ -81,6 +81,7 @@ class AuthController extends Controller
             'email' => ['required', 'email'],
         ]);
 
+        //cek link sudah dikirimkan atau belum 
         $status = Password::sendResetLink(
             $request->only('email')
         );

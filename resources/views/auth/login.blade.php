@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Title -->
-    <title>Masuk | {{ config('app.name', 'Digital Library') }}</title>
+    <title>Masuk | {{ config('app.name', 'E Library') }}</title>
 
     <!-- Laravel Assets -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])

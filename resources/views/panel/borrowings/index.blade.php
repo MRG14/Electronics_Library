@@ -76,11 +76,28 @@
                                                 Review
                                                 </a>
                                             @elseif ($borrowing->status === 'approved')
-                                                <a href="{{ route('borrowings.show.return', $borrowing) }}"
-                                                    class="border border-blue-500 bg-blue-500 text-white rounded hover:bg-white hover:text-blue-500 duration-200 py-1 px-2 font-bold text-xs"
-                                                    title="Konfirmasi pengembalian buku">
-                                                Terima Kembali
-                                                </a>
+                                                <!--Jika user sudah ajukan pengembalian, tampilkan tombol langsung-->
+                                                @if ($borrowing->return_requested)
+                                                    {{-- <form method="POST" action="{{ route('borrowings.return', $borrowing) }}">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <button type="submit"
+                                                            class="border border-green-600 bg-green-600 text-white rounded hover:bg-white hover:text-green-600 duration-200 py-1 px-2 font-bold text-xs"
+                                                            title="Konfirmasi pengembalian buku"
+                                                            onclick="return confirm('Konfirmasi Buku sudah diterima kembali')">
+                                                            Terima Kembali
+                                                        </button>
+                                                    </form> --}}
+                                                    <a href="{{ route('borrowings.show.return', $borrowing) }}"
+                                                        class="border border-blue-500 bg-blue-500 text-white rounded hover:bg-white hover:text-blue-500 duration-200 py-1 px-2 font-bold text-xs"
+                                                        title="Konfirmasi pengembalian buku">
+                                                    Terima Kembali
+                                                    </a>
+                                                @else
+                                                    <span class="text-gray-400 text-xs">
+                                                        User Belum mengembalikan
+                                                    </span>
+                                                @endif
                                             @else
                                                 <span class="text-gray-400 text-xs">-</span>
                                             @endif
@@ -94,6 +111,18 @@
                                             @elseif ($borrowing->status === 'returned')
                                                 <span class="text-gray-400 text-xs">Telah dikembalikan</span>
                                             @endif
+                                        @endif
+                                        
+                                        @if ($borrowing->status === 'returned')
+                                            <form action="{{ route('borrowings.delete', $borrowing->id) }}" method="POST"
+                                                onsubmit="return confirm('Apakah Anda yakin untuk menghapus data ini?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="border border-red-500 bg-red-500 text-white rounded-md hover:bg-white hover:text-red-500 duration-200 py-1 px-2 cursor-pointer">
+                                                    Hapus Data
+                                                </button>
+                                            </form>
                                         @endif
                                     </div>
                                 </td>
@@ -117,10 +146,16 @@
                                             Menunggu
                                         </span>
                                     @elseif ($borrowing->status === 'approved')
-                                        <span
-                                            class="bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
-                                            Dipinjam
-                                        </span>
+                                        <div class="flex flex-col gap-1">
+                                            <span class="bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full w-fit">
+                                                Dipinjam
+                                            </span>
+                                            @if ($borrowing->return_requested)
+                                                <span class="bg-orange-100 text-orange-700 text-xs font-semibold px-2 py-1 rounded-full w-fit">
+                                                    Minta Dikembalikan
+                                                </span>
+                                            @endif
+                                        </div>
                                     @elseif ($borrowing->status === 'rejected')
                                         <span
                                             class="bg-red-100 text-red-700 text-xs font-semibold px-2 py-1 rounded-full">

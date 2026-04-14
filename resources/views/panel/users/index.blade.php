@@ -61,6 +61,7 @@
                             <tr class="hover:bg-gray-50 duration-150">
                                 <td class="px-3 py-2 flex flex-row gap-2">
                                     @if ($user->status)
+
                                         <form action="{{ route('users.block', $user->id) }}" method="POST"
                                             onsubmit="return confirm('Apakah Anda yakin untuk melakukan blokir pada user ini?');">
                                             @csrf

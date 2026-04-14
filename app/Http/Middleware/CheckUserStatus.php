@@ -19,7 +19,7 @@ class CheckUserStatus
             auth()->logout();
 
             return redirect('/login')->withErrors([
-                'email' => 'Akun Anda diblokir oleh admin.'
+                'email' => 'Akun ini telah Diblokir oleh admin'
             ]);
         }
 

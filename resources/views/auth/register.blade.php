@@ -11,7 +11,7 @@
     <!-- Meta Tag - Support Responsive Layout: End -->
 
     <!-- Title: Start -->
-    <title>Daftar Akun | {{ config('app.name', 'Digital Library') }}</title>
+    <title>Daftar Akun | {{ config('app.name', 'E Library') }}</title>
     <!-- Title: End -->
 
     <!-- Laravel Assets: Start -->

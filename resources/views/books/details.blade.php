@@ -107,6 +107,8 @@
 
             @auth
                 @php
+                    // use App\Models\Borrowing;
+
                     $myBorrowing = $book->borrowings()
                         ->where('user_id', auth()->id())
                         ->whereIn('status', ['pending', 'approved'])
@@ -123,9 +125,42 @@
                             Menunggu Konfirmasi admin
                         </span>
                     @elseif ($myBorrowing->status === 'approved')
-                        <span class="w-fit mt-2 font-bold uppercase border border-blue-500 text-blue-600 rounded-lg py-2 px-4 text-sm">
-                            Sedang Kamu Pinjam — Kembali sebelum {{ $myBorrowing->due_date->format('d M Y') }}
-                        </span>
+                        <!--Info Buu sedang dipinjam-->
+                        <div class="mt-2 flex flex-col gap-2">
+                            <span class="w-fit mt-2 font-bold uppercase border border-blue-500 text-blue-600 rounded-lg py-2 px-4 text-sm">
+                                Sedang Kamu Pinjam — Kembali sebelum {{ $myBorrowing->due_date->format('d M Y') }}
+                            </span>
+
+                            <!--tombol ajukan pengembalian-->
+                            @if ($myBorrowing->return_requested)
+                                <!--sudah diajukan, tampilkan info saja-->
+                                <span class="w-fit font-bold uppercase border border-gray-400 text-gray-500 rounded-lg py-2 px-4 text-sm">
+                                    Pengembalian sedang diproses admin
+                                </span>
+                            @else
+                                <!--Belum diajukan, tampilkan tombol pengajuan-->
+                                @if (session('success'))
+                                    <div class="p-3 bg-green-100 border text-green-700 rounded-md text-sm">
+                                        {{ session('success') }}
+                                    </div>
+                                @endif
+                                @if (session('error'))
+                                    <div class="p-3 bg-green-100 border text-red-700 rounded-md text-sm">
+                                        {{ session('error') }}
+                                    </div>
+                                @endif
+
+                                <form method="POST" action="{{ route('borrowings.request.return', $myBorrowing) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit"
+                                        class="w-fit font-bold uppercase border border-orange-500 bg-orange-500 text-white rounded-lg hover:bg-white hover:text-orange-500 duration-200 py-2 px-4 cursor-pointer"
+                                        onclick="return confirm('Konfirmasi kamu akan mengembalikan buku ini ke admin?')">
+                                        Ajukan Pengembalian
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
                     @endif
                 @elseif ($isBookTaken)
                     <!--Buku sedang dipijam orang lain-->

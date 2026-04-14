@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckUserStatus;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Models\Book;
+use App\Models\Borrowing;
 use Illuminate\Support\Facades\Storage;
 
 Route::get('/', [PageController::class, 'index'])->name('frontpage.home');
@@ -62,6 +63,12 @@ Route::middleware(['auth', CheckUserStatus::class])->group(function () {
     //Peminjaman konfirmasi - pengembalian
     Route::get('/panel/borrowing/{borrowing}/return', [BorrowingController::class, 'showReturn'])->name('borrowings.show.return');
     Route::put('/panel/borrowing/{borrowing}/return', [BorrowingController::class, 'handleReturn'])->name('borrowings.return');
+
+    //request return
+    Route::put('/borrowing/{borrowing}/request-return', [BorrowingController::class, 'requestReturn'])->name('borrowings.request.return');
+
+    //delete peminjaman
+    Route::delete('/panel/borrowing/{borrowing}/delete', [BorrowingController::class, 'handleDelete'])->name('borrowings.delete');
 
 
     Route::get('/panel', [BookController::class, 'index'])->name('books.index');

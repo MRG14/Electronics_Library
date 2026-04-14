@@ -16,12 +16,14 @@ class Borrowing extends Model
         'due_date',
         'returned_at',
         'status',
+        'return_requested',
     ];
 
     protected $casts = [
         'borrowed_at' => 'datetime',
         'due_date' => 'datetime',
         'returned_at' => 'datetime',
+        'return_requsted' => 'boolean',
     ];
 
     /**

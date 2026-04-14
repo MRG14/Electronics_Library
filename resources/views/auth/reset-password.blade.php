@@ -11,7 +11,7 @@
     <!-- Meta Tag - Support Responsive Layout: End -->
 
     <!-- Title: Start -->
-    <title>Lupa Kata Sandi | {{ config('app.name', 'Digital Library') }}</title>
+    <title>Lupa Password | {{ config('app.name', 'E Library') }}</title>
     <!-- Title: End -->
 
     <!-- Laravel Assets: Start -->
@@ -20,9 +20,6 @@
 </head>
 
 <body class="w-full flex flex-col">
-    <!-- Header Component: Start -->
-    <x-header class="absolute top-5 lg:top-10 left-0 px-5 lg:px-10 text-white" isLightColor="true"></x-header>
-    <!-- Header Component: End -->
 
     <!-- Forgot Password Section: Start -->
     <section id="forgot-password-section" class="relative flex items-center justify-center w-full h-screen">
@@ -67,7 +64,7 @@
 
             <div class="text-sm lg:text-base w-full flex flex-col gap-1">
                 <label for="password-field" class="text-base">
-                    Kata Sandi
+                    Password
                 </label>
                 <input id="password-field" name="password" type="password"
                     class="w-full outline-none p-3 rounded-lg border placeholder:text-black/30"
