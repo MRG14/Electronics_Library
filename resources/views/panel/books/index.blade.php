@@ -83,14 +83,19 @@
                                             Edit Data
                                         </a>
                                     @endif
-
+                                    
+                                    @php
+                                        $isBorrowed = $book->isBeingBorrowed();
+                                    @endphp
                                     <form action="{{ route('books.delete', $book->id) }}" method="POST"
-                                        onsubmit="return confirm('Apakah Anda yakin untuk menghapus data ini?');">
+                                        onsubmit="return {{ $isBorrowed ? 'false' : 'confirm(\'Apakah anda yakin untuk menghapus data ini?\')' }};">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit"
-                                            class="border border-red-500 bg-red-500 text-white rounded-md hover:bg-white hover:text-red-500 duration-200 py-1 px-2 cursor-pointer">
-                                            Hapus Data
+                                        <button type="submit" {{ $isBorrowed ? 'disable' : '' }}
+                                            class="border border-red-500 rounded-md py-1 px-2 duration-200 {{ $isBorrowed 
+                                                ? 'bg-gray-400 text-white cursor-not-allowed' 
+                                                : 'bg-red-500 text-white hover:bg-white hover:text-red-500 cursor-pointer' }}">
+                                            {{ $isBorrowed ? 'Sedang Dipinjam' : 'Hapus Data' }}
                                         </button>
                                     </form>
                                 </td>

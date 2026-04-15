@@ -66,4 +66,8 @@ class Book extends Model
     public function scopeRejected($query) {
         return $query->where('status', 'rejected');
     }
+
+    public function isBeingBorrowed() {
+        return $this->borrowings()->where('status', '!=', 'returned')->exists();
+    }
 }

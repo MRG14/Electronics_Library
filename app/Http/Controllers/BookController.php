@@ -156,6 +156,12 @@ class BookController extends Controller
     }
 
     public function handleDelete(Book $book){
+        //Cek apakah buku sedang dipinjam
+        $isBorrowed = $book->borrowings()->where('status', '!=', 'returned')->exists();
+        if ($isBorrowed) {
+            return back()->with('error', 'Buku Sedang Dipinjam dan Tidak bisa Dihapus');
+        }
+
         // Soft delete
         $book->delete();
 
