@@ -72,6 +72,20 @@
                 Masuk
             </button>
 
+            <div class="relative w-full flex items-center justify-center my-1">
+                <div class="border-t w-full border-gray-200"></div>
+                <span class="bg-white px-3 text-xs text-gray-400 absolute uppercase">Atau</span>
+            </div>
+
+            <div class="w-full">
+                <a href="{{ route('auth.google') }}"
+                    class="w-full flex items-center justify-center gap-3 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 duration-200 transition-all group">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" 
+                        alt="Google Logo" class="w-5 h-5">
+                    <span class="text-sm font-semibold text-gray-700 group-hover:text-primary">Masuk dengan Google</span>
+                </a>
+            </div>
+
             <div class="flex flex-row gap-2 text-sm">
                 <a href="{{ route('register') }}" title="Klik untuk membuat akun baru"
                     class="text-black hover:text-primary duration-200">

@@ -46,6 +46,9 @@ Route::middleware(RedirectIfAuthenticated::class)->group(function() {
 
     Route::get('/reset-password/{token}', [AuthController::class, 'showResetPassword'])->name('password.reset');
     Route::post('/reset-password', [AuthController::class, 'handleResetPassword'])->name('password.update');
+
+    Route::get('/auth-google-redirect', [AuthController::class, 'google_redirect'])->name('auth.google');
+    Route::get('/auth-google-callback', [AuthController::class, 'google_callback']);
 });
 
 Route::middleware(['auth', CheckUserStatus::class])->group(function () {

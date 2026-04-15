@@ -71,6 +71,22 @@
                     maxlength="100" value="{{ old('email') }}" required />
             </div>
 
+            <div class="w-full flex flex-col gap-1">
+                <label for="role-select" class="text-sm font-semibold">Daftar Sebagai</label>
+                <select id="role-select" name="role" onchange="toggleAdminField()"
+                    class="w-full outline-none p-3 rounded-lg border focus:border-primary bg-white cursor-pointer">
+                    <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User (Pembaca)</option>
+                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin (Pengelola)</option>
+                </select>
+            </div>
+
+            <div id="admin-field-wrapper" class="w-full flex-col gap-1 {{ old('role') == 'admin' ? 'flex' : 'hidden' }}">
+                <label for="admin-code" class="text-sm font-semibold text-primary">Kode Rahasia Admin</label>
+                <input id="admin-code" name="admin_code" type="password"
+                    class="w-full outline-none p-3 rounded-lg border-2 border-primary/30 focus:border-primary placeholder:text-black/30"
+                    placeholder="Masukkan kode rahasia admin" />
+            </div>
+
             <div class="text-sm lg:text-base w-full flex flex-col gap-1">
                 <label for="password-field" class="text-base">
                     Kata Sandi
@@ -102,6 +118,26 @@
         <!-- Form: End -->
     </section>
     <!-- Register Section: End -->
+
+
+    <script>
+        function toggleAdminField() {
+            const roleSelect = document.getElementById('role-select');
+            const adminField = document.getElementById('admin-field-wrapper');
+            const adminInput = document.getElementById('admin-code');
+
+            if (roleSelect.value === 'admin') {
+                adminField.classList.remove('hidden');
+                adminField.classList.add('flex');
+                adminInput.setAttribute('required', 'required');
+            } else {
+                adminField.classList.add('hidden');
+                adminField.classList.remove('flex');
+                adminInput.removeAttribute('required');
+                adminInput.value = '';
+            }
+        }
+    </script>
 </body>
 
 </html>

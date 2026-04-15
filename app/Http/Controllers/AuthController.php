@@ -6,6 +6,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\Rule;
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -59,14 +62,26 @@ class AuthController extends Controller
             'name' => ['required', 'string', 'max:50'],
             'email' => ['required', 'email', 'max:100', 'unique:users,email'],
             'password' => ['required', 'min:6'],
+            'role' => ['required', Rule::in(['admin', 'user'])],
+            'admin_code' => ['required_if:role,admin'],
         ]);
+
+        $role = $validated['role'];
+
+        if ($role === 'admin') {
+            $secretCode = env('ADMIN_REGISTRATION_CODE');
+            if ($request->admin_code !== $secretCode) {
+                return back()->withErrors(['admin_code' => 'Kode registrasi admin tidak valid'])->withInput();
+            }
+        }
 
         // Create user
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'role' => 'user',
+            'role' => $role,
             'password' => Hash::make($validated['password']),
+            'status' => true,
         ]);
 
         // Login automatically after register
@@ -129,4 +144,39 @@ class AuthController extends Controller
         // Redirect to login page
         return redirect('/login');
     }
+
+    /**
+     * Google Redirect
+     */
+    public function google_redirect() {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function google_callback() {
+        try {
+            $googleUser = Socialite::driver('google')->stateless()->user();
+            
+            $user = User::updateOrCreate(
+                ['email' => $googleUser->getEmail()],
+                [
+                    'name' => $googleUser->getName(),
+                    'password' => $user->password ?? Hash::make(Str::random(12)),
+                    'email_verified_at' => now(),
+                    'role' => 'user',
+                    'status' => true,
+                ]
+            );
+
+            // Pastikan variabel $user tidak null sebelum login
+            if ($user) {
+                auth()->login($user, true);
+                return redirect('/panel');
+            }
+            return redirect('/login')->withErrors(['email' => 'Gagal mengidentifikasi user.']);
+        } catch (\Exception $e) {
+            return redirect('/login')->withErrors(['email' => 'Terjadi Kesalahan : '. $e->getMessage()]);
+        }   
+
+    }
+
 }

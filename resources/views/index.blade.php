@@ -34,7 +34,7 @@
 
         <div class="w-5/6 lg:w-1/2 flex flex-col gap-5 text-white z-10 items-center text-center">
             <h1 class="font-bold text-2xl lg:text-4xl">
-                READ ANYWHERE. ANYTIME
+                READ ANYWHERE ANYTIME
             </h1>
             <p class="text-xs lg:text-xl">
                 Perpustakaan digital modern yang dirancang untuk memberikan akses instan ke ribuan buku, jurnal dan
