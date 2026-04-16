@@ -133,6 +133,16 @@
                                                     Hapus Data
                                                 </button>
                                             </form>
+                                        @elseif ($borrowing->status === 'rejected')
+                                            <form action="{{ route('borrowings.delete', $borrowing->id) }}" method="POST"
+                                                onsubmit="return confirm('Apakah Anda yakin untuk menghapus data ini?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="border border-red-500 bg-red-500 text-white rounded-md hover:bg-white hover:text-red-500 duration-200 py-1 px-2 cursor-pointer">
+                                                    Hapus Data
+                                                </button>
+                                            </form>
                                         @endif
                                     </div>
                                 </td>

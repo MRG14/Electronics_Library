@@ -68,6 +68,6 @@ class Book extends Model
     }
 
     public function isBeingBorrowed() {
-        return $this->borrowings()->where('status', '!=', 'returned')->exists();
+        return $this->borrowings()->where('status', ['pending', 'approved'])->exists();
     }
 }

@@ -118,6 +118,15 @@
                         ->exists();
                 @endphp
 
+                @php
+                    $activeBorrowings = auth()->user()->borrowings()->where('status', ['pending', 'approved'])->count();
+                    $isLimitReached = $activeBorrowings >= 3;
+                @endphp
+
+                <p class="text-sm text-gray-600 mt-2">
+                    Sisa Slot Pinjaman: {{ 3 - $activeBorrowings }}
+                </p>
+
                 @if ($myBorrowing)
                     <!--User sudah punya peminjaman aktif-->    
                     @if ($myBorrowing->status === 'pending')
@@ -180,12 +189,22 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('borrowings.store') }}" class="mt-2">
+                    <form method="POST" action="{{ route('borrowings.store') }}" 
+                        onsubmit="return {{ $isLimitReached ? 'false' : 'confirm(\'Apakah anda yakin untuk meminjam Buku ini?\')' }};" class="mt-2">
                         @csrf
                         <input type="hidden" name="book_id" value="{{ $book->id }}" />
-                        <button type="submit"
+                        {{-- <button type="submit"
                             class="w-fit font-bold uppercase border border-green-600 bg-green-600 text-white rounded-lg hover:bg-white hover:text-green-600 duration-200 py-2 px-4 cursor-pointer">
                             Pinjam Buku
+                        </button> --}}
+
+                        <button type="submit"
+                            {{ $isLimitReached ? 'disabled title=Batas\ maksimal\ 3\ buku' : '' }}
+                            class="w-fit font-bold uppercase border rounded-lg py-2 px-4 duration-200 {{ $isLimitReached 
+                                    ? 'bg-gray-400 text-white cursor-not-allowed border-gray-400' 
+                                    : 'bg-green-600 text-white hover:bg-white hover:text-green-600 border-green-600 cursor-pointer' }}">
+                            
+                            {{ $isLimitReached ? 'Limit Tercapai (3 Buku)' : 'Pinjam Buku' }}
                         </button>
                     </form>
                 @endif

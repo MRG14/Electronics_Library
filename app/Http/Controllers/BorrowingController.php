@@ -43,13 +43,19 @@ class BorrowingController extends Controller
             return back()->with('error', 'Buku ini tidak tersedia untuk dipinjam');
         }
 
+        //cek jumlah peminjaman aktif user
+        $activeBorrowings = Borrowing::where('user_id', auth()->id())->whereIn('status', ['pending', 'approved'])->count();
+        if ($activeBorrowings >= 3) {
+            return back()->with('error', 'Batas Maksimal Peminjaman Adalah 3 buku. Silahkan Kembalikan buku terlebih dahulu');
+        }
+
         //cek apakah buku sedang dipinjam atau tidak
         $isBeingBorrowed = Borrowing::where('book_id', $book->id)
         ->whereIn('status', ['pending', 'approved'])
         ->exists();
 
         if ($isBeingBorrowed) {
-            return back()->with('error', 'Buku ini Sedang dipinjam. silahka coba lagi nanti');
+            return back()->with('error', 'Buku ini Sedang dipinjam. silahkan coba lagi nanti');
         }
 
         //cek apakah user punya peminjaman aktif yang sama
@@ -103,7 +109,7 @@ class BorrowingController extends Controller
        }
 
        $request->validate([
-            'approval' => 'required:in:approve,reject',
+            'approval' => 'required|in:approve,reject',
        ]);
 
        if ($request->approval === 'approve') {
